@@ -6,6 +6,7 @@ import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.services.BeerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,11 +65,17 @@ public class BeerController {
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
+    /** @author: TanTD9
+    * @since: 4/19/2023 8:36 PM
+    * @description:  ada param for paging and sort
+    * */
     @GetMapping(value = BEER_PATH)
-    public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName,
+    public Page<BeerDTO> listBeers(@RequestParam(required = false) String beerName,
                                    @RequestParam(required = false) BeerStyle beerStyle,
-                                   @RequestParam(required = false) Boolean showInventory){
-        return beerService.listBeers(beerName, beerStyle, showInventory);
+                                   @RequestParam(required = false) Boolean showInventory,
+                                   @RequestParam(required = false) Integer pageNumber,
+                                   @RequestParam(required = false) Integer pageSize){
+        return beerService.listBeers(beerName, beerStyle, showInventory,pageNumber,pageSize);
     }
 
 
@@ -79,10 +86,7 @@ public class BeerController {
 
         return beerService.getBeerById(beerId).orElseThrow(NotFoundException::new);
     }
-    @GetMapping(value = BEER_PATH+"1" )
-    public List<Beer> listBeerss(){
-        return beerService.listBeerss();
-    }
+
 
 
 }
